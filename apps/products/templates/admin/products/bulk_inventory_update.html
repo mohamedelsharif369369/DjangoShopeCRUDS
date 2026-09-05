@@ -1,0 +1,110 @@
+{% extends "admin/base_site.html" %}
+
+{% block content %}
+<div id="content-main">
+
+    <h1>Bulk Inventory Update</h1>
+
+    {% if low_stock_products %}
+        <div class="messagelist">
+            <div class="warning">
+                <strong>Low Stock Alert</strong>
+                <ul>
+                    {% for product in low_stock_products %}
+                        <li>
+                            {{ product.name }}
+                            — {{ product.sku }}
+                            — Stock: {{ product.stock_quantity }}
+                            — Threshold: {{ product.low_stock_threshold }}
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    {% endif %}
+
+    <form method="post">
+        {% csrf_token %}
+
+        <fieldset class="module aligned">
+            <div class="form-row">
+                <label for="transaction_type">Transaction type:</label>
+                <select name="transaction_type" id="transaction_type" required>
+                    <option value="in">Stock In</option>
+                    <option value="out">Stock Out</option>
+                    <option value="adjustment">Adjustment</option>
+                </select>
+            </div>
+
+            <div class="form-row">
+                <label for="quantity">Quantity:</label>
+                <input
+                    type="number"
+                    name="quantity"
+                    id="quantity"
+                    min="1"
+                    required
+                >
+            </div>
+
+            <div class="form-row">
+                <label for="note">Note:</label>
+                <input
+                    type="text"
+                    name="note"
+                    id="note"
+                    maxlength="255"
+                >
+            </div>
+        </fieldset>
+
+        <fieldset class="module">
+            <h2>Select Products</h2>
+
+            <div style="padding: 10px 0;">
+                <label>
+                    <input type="checkbox" id="select-all">
+                    <strong>Select all</strong>
+                </label>
+            </div>
+
+            {% for product in products %}
+                <div style="padding: 6px 0;">
+                    <label>
+                        <input
+                            type="checkbox"
+                            name="product_ids"
+                            value="{{ product.pk }}"
+                            class="product-checkbox"
+                        >
+                        {{ product.name }}
+                        — {{ product.sku }}
+                        — Stock: {{ product.stock_quantity }}
+                    </label>
+                </div>
+            {% empty %}
+                <p>No active products found.</p>
+            {% endfor %}
+        </fieldset>
+
+        <div class="submit-row">
+            <input
+                type="submit"
+                value="Update Selected Products"
+                class="default"
+            >
+        </div>
+
+    </form>
+
+</div>
+
+<script>
+document.getElementById("select-all").addEventListener("change", function () {
+    document.querySelectorAll(".product-checkbox").forEach(function (checkbox) {
+        checkbox.checked = this.checked;
+    }, this);
+});
+</script>
+
+{% endblock %}

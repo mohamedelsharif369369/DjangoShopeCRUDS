@@ -1,0 +1,26 @@
+.category-ordering-help {
+    margin: 0 0 20px;
+    padding: 15px;
+    border: 1px solid var(--hairline-color, #ddd);
+    background: var(--darkened-bg, #f8f8f8);
+}
+
+.category-ordering-help p {
+    margin: 5px 0 0;
+}
+
+.category-drag-handle {
+    display: inline-block;
+    margin-right: 8px;
+    cursor: grab;
+    font-size: 18px;
+    user-select: none;
+}
+
+.category-drag-handle:active {
+    cursor: grabbing;
+}
+
+.category-dragging {
+    opacity: 0.45;
+}

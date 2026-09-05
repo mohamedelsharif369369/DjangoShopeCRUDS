@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ product.name }} | Product Catalog</title>
+</head>
+
+<body>
+
+    <nav>
+        <a href="{% url 'products:product_list' %}">
+            ← Back to products
+        </a>
+    </nav>
+
+    <main>
+        <p>
+            Home /
+            {{ product.category.name }} /
+            {{ product.name }}
+        </p>
+
+        <h1>{{ product.name }}</h1>
+
+        <p><strong>SKU:</strong> {{ product.sku }}</p>
+
+        <p>
+            <strong>Category:</strong>
+            {{ product.category.name }}
+        </p>
+
+        <p>
+            <strong>Price:</strong>
+            {{ product.price }}
+        </p>
+
+        <p>
+            <strong>Stock:</strong>
+            {{ product.stock_quantity }}
+        </p>
+
+        {% if product.is_low_stock %}
+            <p>
+                <strong>Low stock</strong>
+            </p>
+        {% endif %}
+
+        {% if product.description %}
+            <h2>Description</h2>
+            <p>{{ product.description|linebreaks }}</p>
+        {% endif %}
+
+        {% if product.tags.exists %}
+            <h2>Tags</h2>
+            {% for tag in product.tags.all %}
+                <span>{{ tag.name }}</span>
+            {% endfor %}
+        {% endif %}
+    </main>
+
+</body>
+</html>

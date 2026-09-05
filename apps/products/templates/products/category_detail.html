@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ category.name }} | Product Catalog</title>
+</head>
+
+<body>
+
+    <nav aria-label="Breadcrumb">
+        <a href="{% url 'products:product_list' %}">
+            All Products
+        </a>
+
+        {% for breadcrumb in breadcrumbs %}
+            &nbsp;→&nbsp;
+
+            {% if forloop.last %}
+                <strong>{{ breadcrumb.name }}</strong>
+            {% else %}
+                <a href="{{ breadcrumb.get_absolute_url }}">
+                    {{ breadcrumb.name }}
+                </a>
+            {% endif %}
+        {% endfor %}
+    </nav>
+
+    <h1>{{ category.name }}</h1>
+
+    {% for product in page_obj %}
+        <article>
+            <h2>
+                <a href="{{ product.get_absolute_url }}">
+                    {{ product.name }}
+                </a>
+            </h2>
+
+            <p>SKU: {{ product.sku }}</p>
+            <p>Price: {{ product.price }}</p>
+            <p>Stock: {{ product.stock_quantity }}</p>
+        </article>
+
+        <hr>
+    {% empty %}
+        <p>No products in this category.</p>
+    {% endfor %}
+
+</body>
+</html>

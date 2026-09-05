@@ -1,0 +1,21 @@
+{% extends "admin/base_site.html" %}
+
+{% block content %}
+<div id="content-main">
+    <h1>Inventory Management</h1>
+
+    <form method="post">
+        {% csrf_token %}
+
+        {{ form.non_field_errors }}
+
+        <fieldset class="module aligned">
+            {{ form.as_p }}
+        </fieldset>
+
+        <div class="submit-row">
+            <input type="submit" value="Update Inventory" class="default">
+        </div>
+    </form>
+</div>
+{% endblock %}

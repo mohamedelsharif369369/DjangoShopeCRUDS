@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Catalog</title>
+</head>
+
+<body>
+
+    <h1>Product Catalog</h1>
+
+    <form method="get">
+        <input
+            type="text"
+            name="q"
+            placeholder="Search products..."
+            value="{{ query }}"
+        >
+
+        <select name="category">
+            <option value="">All categories</option>
+
+            {% for category in categories %}
+                <option
+                    value="{{ category.slug }}"
+                    {% if selected_category == category.slug %}selected{% endif %}
+                >
+                    {{ category.name }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <button type="submit">Search</button>
+    </form>
+
+    <hr>
+
+    {% for product in page_obj %}
+        <article>
+            <h2>
+                <a href="{{ product.get_absolute_url }}">
+                    {{ product.name }}
+                </a>
+            </h2>
+
+            <p>SKU: {{ product.sku }}</p>
+            <p>Category: {{ product.category.name }}</p>
+            <p>Price: {{ product.price }}</p>
+            <p>Stock: {{ product.stock_quantity }}</p>
+
+            {% if product.is_low_stock %}
+                <p><strong>Low stock</strong></p>
+            {% endif %}
+        </article>
+
+        <hr>
+    {% empty %}
+        <p>No products found.</p>
+    {% endfor %}
+
+    {% if page_obj.has_other_pages %}
+        <div>
+            {% if page_obj.has_previous %}
+                <a href="?q={{ query }}&category={{ selected_category }}&page={{ page_obj.previous_page_number }}">
+                    Previous
+                </a>
+            {% endif %}
+
+            <span>
+                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+            </span>
+
+            {% if page_obj.has_next %}
+                <a href="?q={{ query }}&category={{ selected_category }}&page={{ page_obj.next_page_number }}">
+                    Next
+                </a>
+            {% endif %}
+        </div>
+    {% endif %}
+
+</body>
+</html>
